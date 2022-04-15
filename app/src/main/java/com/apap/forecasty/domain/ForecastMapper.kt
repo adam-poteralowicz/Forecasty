@@ -10,16 +10,16 @@ fun ForecastResponse.toForecast() = Forecast(
     longitude = longitude ?: throw ApiParseException("longitude == null"),
     timezone = timezone ?: throw ApiParseException("timezone == null"),
     timezoneOffset = timezoneOffset ?: throw ApiParseException("timezone offset == null"),
-    current = current.extractCurrentForecast(),
-    minutely = minutely.extractMinutelyForecast(),
-    hourly = hourly.extractHourlyForecast(),
-    daily = daily.extractDailyForecast(),
-    alerts = alerts.extractAlerts()
+    currentForecast = current.extractCurrentForecast(),
+    minutelyForecast = minutely.extractMinutelyForecast(),
+    hourlyForecast = hourly.extractHourlyForecast(),
+    dailyForecast = daily.extractDailyForecast(),
+    weatherAlerts = alerts.extractAlerts()
 )
 
-private fun ForecastResponse.CurrentForecast?.extractCurrentForecast(): Current {
+private fun ForecastResponse.Current?.extractCurrentForecast(): CurrentForecast {
     this ?: throw ApiParseException("current forecast == null")
-    return Current(
+    return CurrentForecast(
         dt = dt ?: throw ApiParseException("dt == null"),
         sunrise = sunrise ?: throw ApiParseException("sunrise == null"),
         sunset = sunset ?: throw ApiParseException("sunset == null"),
@@ -48,27 +48,27 @@ private fun ForecastResponse.Weather?.extractWeather(): Weather {
     )
 }
 
-private fun ForecastResponse.CurrentForecast.Rain?.extractRain(): Rain {
+private fun ForecastResponse.Current.Rain?.extractRain(): Rain {
     this ?: throw ApiParseException("rain == null")
     return Rain(
         hourlyRainVolume = hourlyRainVolume ?: throw ApiParseException("hourly rain == null")
     )
 }
 
-private fun List<ForecastResponse.MinutelyForecast>?.extractMinutelyForecast(): List<Minutely> {
+private fun List<ForecastResponse.Minutely>?.extractMinutelyForecast(): List<MinutelyForecast> {
     this ?: return emptyList()
     return map {
-        Minutely(
+        MinutelyForecast(
             dt = it.dt ?: throw ApiParseException("dt == null"),
             precipitation = it.precipitation ?: throw ApiParseException("precipitation == null"),
         )
     }
 }
 
-private fun List<ForecastResponse.HourlyForecast>?.extractHourlyForecast(): List<Hourly> {
+private fun List<ForecastResponse.Hourly>?.extractHourlyForecast(): List<HourlyForecast> {
     this ?: return emptyList()
     return map {
-        Hourly(
+        HourlyForecast(
             dt = it.dt ?: throw ApiParseException("dt == null"),
             temperature = it.temperature ?: throw ApiParseException("temperature == null"),
             feelsLike = it.feelsLike ?: throw ApiParseException("feels like == null"),
@@ -89,10 +89,10 @@ private fun List<ForecastResponse.HourlyForecast>?.extractHourlyForecast(): List
     }
 }
 
-private fun List<ForecastResponse.DailyForecast>?.extractDailyForecast(): List<Daily> {
+private fun List<ForecastResponse.Daily>?.extractDailyForecast(): List<DailyForecast> {
     this ?: return emptyList()
     return map {
-        Daily(
+        DailyForecast(
             dt = it.dt ?: throw ApiParseException("dt == null"),
             sunrise = it.sunrise ?: throw ApiParseException("sunrise == null"),
             sunset = it.sunset ?: throw ApiParseException("sunset == null"),
@@ -117,7 +117,7 @@ private fun List<ForecastResponse.DailyForecast>?.extractDailyForecast(): List<D
     }
 }
 
-private fun ForecastResponse.DailyForecast.Temperature?.extractTemperature(): Temperature {
+private fun ForecastResponse.Daily.Temperature?.extractTemperature(): Temperature {
     this ?: throw ApiParseException("temperature == null")
     return Temperature(
         day = day ?: throw ApiParseException("day temperature == null"),
@@ -129,7 +129,7 @@ private fun ForecastResponse.DailyForecast.Temperature?.extractTemperature(): Te
     )
 }
 
-private fun ForecastResponse.DailyForecast.FeelsLike?.extractFeelsLike(): FeelsLike {
+private fun ForecastResponse.Daily.FeelsLike?.extractFeelsLike(): FeelsLike {
     this ?: throw ApiParseException("feels like == null")
     return FeelsLike(
         day = day ?: throw ApiParseException("day feels like == null"),
@@ -139,10 +139,10 @@ private fun ForecastResponse.DailyForecast.FeelsLike?.extractFeelsLike(): FeelsL
     )
 }
 
-private fun List<ForecastResponse.WeatherAlert>?.extractAlerts(): List<Alert> {
+private fun List<ForecastResponse.Alert>?.extractAlerts(): List<WeatherAlert> {
     this ?: return emptyList()
     return map {
-        Alert(
+        WeatherAlert(
             senderName = it.senderName ?: throw ApiParseException("alert sender name == null"),
             event = it.event ?: throw ApiParseException("alert event == null"),
             start = it.start ?: throw ApiParseException("alert start == null"),

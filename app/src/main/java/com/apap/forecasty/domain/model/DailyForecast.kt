@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class Daily(
+data class DailyForecast(
     val dt: Int,
     val sunrise: Int,
     val sunset: Int,

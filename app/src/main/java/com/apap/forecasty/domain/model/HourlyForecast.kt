@@ -4,10 +4,8 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class Current(
+data class HourlyForecast(
     val dt: Int,
-    val sunrise: Int,
-    val sunset: Int,
     val temperature: Double,
     val feelsLike: Double,
     val pressure: Int,
@@ -16,8 +14,9 @@ data class Current(
     val uvIndex: Double,
     val clouds: Int,
     val visibility: Int,
-    val windSpeed: Int,
+    val windSpeed: Double,
     val windDirection: Int,
+    val windGust: Double,
     val weather: Weather,
-    val rain: Rain,
+    val precipitationProbability: Int
 ) : Parcelable

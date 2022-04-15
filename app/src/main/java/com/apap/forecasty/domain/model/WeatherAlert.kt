@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class Alert(
+data class WeatherAlert(
     val senderName: String,
     val event: String,
     val start: Int,

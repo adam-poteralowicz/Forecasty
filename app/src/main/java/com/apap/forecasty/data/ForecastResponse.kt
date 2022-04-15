@@ -9,11 +9,11 @@ data class ForecastResponse(
     @Json(name = "lon") val longitude: String?,
     @Json(name = "timezone") val timezone: String?,
     @Json(name = "timezone_offset") val timezoneOffset: Int?,
-    @Json(name = "current") val current: CurrentForecast?,
-    @Json(name = "minutely") val minutely: List<MinutelyForecast>?,
-    @Json(name = "hourly") val hourly: List<HourlyForecast>?,
-    @Json(name = "daily") val daily: List<DailyForecast>?,
-    @Json(name = "alerts") val alerts: List<WeatherAlert>?,
+    @Json(name = "current") val current: Current?,
+    @Json(name = "minutely") val minutely: List<Minutely>?,
+    @Json(name = "hourly") val hourly: List<Hourly>?,
+    @Json(name = "daily") val daily: List<Daily>?,
+    @Json(name = "alerts") val alerts: List<Alert>?,
 ) {
 
     @JsonClass(generateAdapter = true)
@@ -25,7 +25,7 @@ data class ForecastResponse(
     )
 
     @JsonClass(generateAdapter = true)
-    data class CurrentForecast(
+    data class Current(
         @Json(name = "dt") val dt: Int?,
         @Json(name = "sunrise") val sunrise: Int?,
         @Json(name = "sunset") val sunset: Int?,
@@ -51,13 +51,13 @@ data class ForecastResponse(
     }
 
     @JsonClass(generateAdapter = true)
-    data class MinutelyForecast(
+    data class Minutely(
         @Json(name = "dt") val dt: Int?,
         @Json(name = "precipitation") val precipitation: Double?,
     )
 
     @JsonClass(generateAdapter = true)
-    data class HourlyForecast(
+    data class Hourly(
         @Json(name = "dt") val dt: Int?,
         @Json(name = "temp") val temperature: Double?,
         @Json(name = "feels_like") val feelsLike: Double?,
@@ -75,7 +75,7 @@ data class ForecastResponse(
     )
 
     @JsonClass(generateAdapter = true)
-    data class DailyForecast(
+    data class Daily(
         @Json(name = "dt") val dt: Int?,
         @Json(name = "sunrise") val sunrise: Int?,
         @Json(name = "sunset") val sunset: Int?,
@@ -116,7 +116,7 @@ data class ForecastResponse(
     }
 
     @JsonClass(generateAdapter = true)
-    data class WeatherAlert(
+    data class Alert(
         @Json(name = "sender_name") val senderName: String?,
         @Json(name = "event") val event: String?,
         @Json(name = "start") val start: Int?,
