@@ -1,0 +1,26 @@
+ext.versions = [
+    compose: '1.1.1',
+    composeFoundation: '1.2.0-alpha04',
+    composeMaterial: '1.0.0-alpha06',
+    hilt: '2.40.5'
+]
+
+ext.deps = [
+    androidX: [
+        compose: [
+            foundation : "androidx.compose.foundation:foundation:$versions.compose",
+            material   : "androidx.compose.material3:material3:$versions.composeMaterial",
+            ui         : "androidx.compose.ui:ui:$versions.compose",
+            uiTest     : "androidx.compose.ui:ui-test:$versions.compose",
+            uiTestJUnit: "androidx.compose.ui:ui-test-junit4:$versions.compose",
+            uiTooling  : [
+                core   : "androidx.compose.ui:ui-tooling:$versions.compose",
+                preview: "androidx.compose.ui:ui-tooling-preview:$versions.compose",
+            ],
+        ],
+    ],
+    hilt: [
+        compiler: "com.google.dagger:hilt-compiler:$versions.hilt",
+        runtime: "com.google.dagger:hilt-android:$versions.hilt",
+    ],
+]
