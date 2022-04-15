@@ -2,7 +2,11 @@ ext.versions = [
     compose: '1.1.1',
     composeFoundation: '1.2.0-alpha04',
     composeMaterial: '1.0.0-alpha06',
-    hilt: '2.40.5'
+    hilt: '2.40.5',
+    moshi: '1.13.0',
+    moshix: '0.16.7',
+    moshiConverter: '2.4.0',
+    retrofit: '2.9.0',
 ]
 
 ext.deps = [
@@ -22,5 +26,19 @@ ext.deps = [
     hilt: [
         compiler: "com.google.dagger:hilt-compiler:$versions.hilt",
         runtime: "com.google.dagger:hilt-android:$versions.hilt",
+    ],
+    moshi: [
+            codegen: "com.squareup.moshi:moshi-kotlin-codegen:$versions.moshi",
+            core: "com.squareup.moshi:moshi:$versions.moshi",
+    ],
+    moshix: [
+            sealed: "dev.zacsweers.moshix:moshi-sealed-runtime:$versions.moshix",
+            sealedCodegen: "dev.zacsweers.moshix:moshi-sealed-codegen:$versions.moshix",
+            sealedReflect: "dev.zacsweers.moshix:moshi-sealed-reflect:$versions.moshix",
+            adapters: "dev.zacsweers.moshix:moshi-adapters:$versions.moshix"
+    ],
+    retrofit: [
+            core: "com.squareup.retrofit2:retrofit:$versions.retrofit",
+            moshiConverter: "com.squareup.retrofit2:converter-moshi:$versions.moshiConverter",
     ],
 ]
