@@ -20,6 +20,8 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
+
+        buildConfigField 'String', 'WEATHER_API_KEY', "\"9c12b2d9453f4c2fdd576df2243b5e94\""
     }
 
     buildTypes {

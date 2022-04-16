@@ -1,4 +1,4 @@
-package com.apap.forecasty.domain
+package com.apap.forecasty.domain.mapper
 
 import com.apap.forecasty.data.ForecastResponse
 import com.apap.forecasty.domain.model.*
