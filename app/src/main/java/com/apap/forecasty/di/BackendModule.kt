@@ -1,16 +1,15 @@
 package com.apap.forecasty.di;
 
 import com.squareup.moshi.Moshi
-import javax.inject.Singleton;
-
-import dagger.Module;
-import dagger.Provides;
-import dagger.hilt.InstallIn;
-import dagger.hilt.components.SingletonComponent;
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import java.time.Duration
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -21,8 +20,9 @@ object BackendModule {
     @Provides
     @Singleton
     fun provideOkHttpClient(): OkHttpClient {
+        val interceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
         return OkHttpClient().newBuilder()
-            .readTimeout(Duration.ofSeconds(20))
+            .addInterceptor(interceptor)
             .build()
     }
 
