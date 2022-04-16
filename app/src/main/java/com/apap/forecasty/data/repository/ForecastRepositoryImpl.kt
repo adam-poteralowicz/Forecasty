@@ -13,8 +13,8 @@ class ForecastRepositoryImpl @Inject constructor(
     override suspend fun getForecast() = Result.runCatching {
         // TODO: Retrieve current location
         service.getCurrentForecast(
-            latitude = "51.0",
-            longitude = "17.0",
+            latitude = "51.02",
+            longitude = "17.02",
             appId = BuildConfig.WEATHER_API_KEY,
         ).toForecast()
     }

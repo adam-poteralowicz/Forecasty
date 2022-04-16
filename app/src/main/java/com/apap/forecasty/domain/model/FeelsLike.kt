@@ -5,8 +5,8 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class FeelsLike(
-    val day: Double,
-    val night: Double,
-    val evening: Double,
-    val morning: Double,
+    val day: Float,
+    val night: Float,
+    val evening: Float,
+    val morning: Float,
 ) : Parcelable

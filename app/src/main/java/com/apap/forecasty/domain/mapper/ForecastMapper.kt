@@ -39,18 +39,20 @@ private fun ForecastResponse.Current?.extractCurrentForecast() = this?.run {
     )
 } ?: throw ApiParseException("current forecast == null")
 
-private fun ForecastResponse.Weather?.extractWeather() = this?.run {
-    Weather(
-        id = id ?: throw ApiParseException("weather id == null"),
-        main = main ?: throw ApiParseException("weather main == null"),
-        description = description ?: throw ApiParseException("weather description == null"),
-        icon = icon ?: throw ApiParseException("weather icon == null"),
-    )
-} ?: throw ApiParseException("weather == null")
+private fun List<ForecastResponse.Weather>?.extractWeather() = this?.run {
+    map {
+        Weather(
+            id = it.id ?: throw ApiParseException("weather id == null"),
+            main = it.main ?: throw ApiParseException("weather main == null"),
+            description = it.description ?: throw ApiParseException("weather description == null"),
+            icon = it.icon ?: throw ApiParseException("weather icon == null"),
+        )
+    }
+} ?: emptyList()
 
 private fun ForecastResponse.Current.Rain?.extractRain() = this?.run {
     Rain(hourlyRainVolume = hourlyRainVolume ?: throw ApiParseException("hourly rain == null"))
-} ?: throw ApiParseException("rain == null")
+}
 
 private fun List<ForecastResponse.Minutely>?.extractMinutelyForecast() = this?.run {
     map {
@@ -75,7 +77,7 @@ private fun List<ForecastResponse.Hourly>?.extractHourlyForecast() = this?.run {
             visibility = it.visibility ?: throw ApiParseException("visibility == null"),
             windSpeed = it.windSpeed ?: throw ApiParseException("wind speed == null"),
             windDirection = it.windDirection ?: throw ApiParseException("wind direction == null"),
-            windGust = it.windGust ?: throw ApiParseException("wind gust == null"),
+            windGust = it.windGust,
             weather = it.weather.extractWeather(),
             precipitationProbability = it.precipitationProbability ?: throw ApiParseException(
                 "precipitation probability == null"
@@ -105,7 +107,7 @@ private fun List<ForecastResponse.Daily>?.extractDailyForecast() = this?.run {
             precipitationProbability = it.precipitationProbability ?: throw ApiParseException(
                 "precipitation probability == null"
             ),
-            rain = it.rain ?: throw ApiParseException("rain == null"),
+            rain = it.rain,
             uvIndex = it.uvIndex ?: throw ApiParseException("ui index == null"),
         )
     }

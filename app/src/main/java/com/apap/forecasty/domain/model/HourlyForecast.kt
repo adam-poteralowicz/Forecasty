@@ -6,17 +6,17 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class HourlyForecast(
     val dt: Int,
-    val temperature: Double,
-    val feelsLike: Double,
+    val temperature: Float,
+    val feelsLike: Float,
     val pressure: Int,
     val humidity: Int,
-    val dewPoint: Double,
-    val uvIndex: Double,
+    val dewPoint: Float,
+    val uvIndex: Float,
     val clouds: Int,
     val visibility: Int,
-    val windSpeed: Double,
+    val windSpeed: Float,
     val windDirection: Int,
-    val windGust: Double,
-    val weather: Weather,
-    val precipitationProbability: Int
+    val windGust: Float?,
+    val weather: List<Weather>,
+    val precipitationProbability: Float
 ) : Parcelable

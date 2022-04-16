@@ -5,5 +5,5 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Rain(
-    val hourlyRainVolume: Double
+    val hourlyRainVolume: Float
 ) : Parcelable

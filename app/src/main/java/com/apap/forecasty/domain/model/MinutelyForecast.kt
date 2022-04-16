@@ -6,5 +6,5 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class MinutelyForecast(
     val dt: Int,
-    val precipitation: Double,
+    val precipitation: Float,
 ) : Parcelable

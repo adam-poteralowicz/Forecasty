@@ -5,8 +5,8 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class ForecastResponse(
-    @Json(name = "lat") val latitude: String?,
-    @Json(name = "lon") val longitude: String?,
+    @Json(name = "lat") val latitude: Float?,
+    @Json(name = "lon") val longitude: Float?,
     @Json(name = "timezone") val timezone: String?,
     @Json(name = "timezone_offset") val timezoneOffset: Int?,
     @Json(name = "current") val current: Current?,
@@ -29,49 +29,49 @@ data class ForecastResponse(
         @Json(name = "dt") val dt: Int?,
         @Json(name = "sunrise") val sunrise: Int?,
         @Json(name = "sunset") val sunset: Int?,
-        @Json(name = "temp") val temperature: Double?,
-        @Json(name = "feels_like") val feelsLike: Double?,
+        @Json(name = "temp") val temperature: Float?,
+        @Json(name = "feels_like") val feelsLike: Float?,
         @Json(name = "pressure") val pressure: Int?,
         @Json(name = "humidity") val humidity: Int?,
-        @Json(name = "dew_point") val dewPoint: Double?,
-        @Json(name = "uvi") val uvIndex: Double?,
+        @Json(name = "dew_point") val dewPoint: Float?,
+        @Json(name = "uvi") val uvIndex: Float?,
         @Json(name = "clouds") val clouds: Int?,
         @Json(name = "visibility") val visibility: Int?,
-        @Json(name = "wind_speed") val windSpeed: Int?,
+        @Json(name = "wind_speed") val windSpeed: Float?,
         @Json(name = "wind_deg") val windDirection: Int?,
-        @Json(name = "weather") val weather: Weather?,
+        @Json(name = "weather") val weather: List<Weather>?,
         @Json(name = "rain") val rain: Rain?,
     ) {
 
 
         @JsonClass(generateAdapter = true)
         data class Rain(
-            @Json(name = "1h") val hourlyRainVolume: Double?
+            @Json(name = "1h") val hourlyRainVolume: Float?
         )
     }
 
     @JsonClass(generateAdapter = true)
     data class Minutely(
         @Json(name = "dt") val dt: Int?,
-        @Json(name = "precipitation") val precipitation: Double?,
+        @Json(name = "precipitation") val precipitation: Float?,
     )
 
     @JsonClass(generateAdapter = true)
     data class Hourly(
         @Json(name = "dt") val dt: Int?,
-        @Json(name = "temp") val temperature: Double?,
-        @Json(name = "feels_like") val feelsLike: Double?,
+        @Json(name = "temp") val temperature: Float?,
+        @Json(name = "feels_like") val feelsLike: Float?,
         @Json(name = "pressure") val pressure: Int?,
         @Json(name = "humidity") val humidity: Int?,
-        @Json(name = "dew_point") val dewPoint: Double?,
-        @Json(name = "uvi") val uvIndex: Double?,
+        @Json(name = "dew_point") val dewPoint: Float?,
+        @Json(name = "uvi") val uvIndex: Float?,
         @Json(name = "clouds") val clouds: Int?,
         @Json(name = "visibility") val visibility: Int?,
-        @Json(name = "wind_speed") val windSpeed: Double?,
+        @Json(name = "wind_speed") val windSpeed: Float?,
         @Json(name = "wind_deg") val windDirection: Int?,
-        @Json(name = "wind_gust") val windGust: Double?,
-        @Json(name = "weather") val weather: Weather?,
-        @Json(name = "pop") val precipitationProbability: Int?,
+        @Json(name = "wind_gust") val windGust: Float?,
+        @Json(name = "weather") val weather: List<Weather>?,
+        @Json(name = "pop") val precipitationProbability: Float?,
     )
 
     @JsonClass(generateAdapter = true)
@@ -81,37 +81,37 @@ data class ForecastResponse(
         @Json(name = "sunset") val sunset: Int?,
         @Json(name = "moonrise") val moonrise: Int?,
         @Json(name = "moonset") val moonset: Int?,
-        @Json(name = "moon_phase") val moonPhase: Double?,
+        @Json(name = "moon_phase") val moonPhase: Float?,
         @Json(name = "temp") val temperature: Temperature?,
         @Json(name = "feels_like") val feelsLike: FeelsLike?,
         @Json(name = "pressure") val pressure: Int?,
         @Json(name = "humidity") val humidity: Int?,
-        @Json(name = "dew_point") val dewPoint: Double?,
-        @Json(name = "wind_speed") val windSpeed: Double?,
+        @Json(name = "dew_point") val dewPoint: Float?,
+        @Json(name = "wind_speed") val windSpeed: Float?,
         @Json(name = "wind_deg") val windDirection: Int?,
-        @Json(name = "weather") val weather: Weather?,
+        @Json(name = "weather") val weather: List<Weather>?,
         @Json(name = "clouds") val clouds: Int?,
-        @Json(name = "pop") val precipitationProbability: Int?,
-        @Json(name = "rain") val rain: Double?,
-        @Json(name = "uvi") val uvIndex: Double?,
+        @Json(name = "pop") val precipitationProbability: Float?,
+        @Json(name = "rain") val rain: Float?,
+        @Json(name = "uvi") val uvIndex: Float?,
     ) {
 
         @JsonClass(generateAdapter = true)
         data class Temperature(
-            @Json(name = "day") val day: Double?,
-            @Json(name = "min") val min: Double?,
-            @Json(name = "max") val max: Double?,
-            @Json(name = "night") val night: Double?,
-            @Json(name = "eve") val evening: Double?,
-            @Json(name = "morn") val morning: Double?,
+            @Json(name = "day") val day: Float?,
+            @Json(name = "min") val min: Float?,
+            @Json(name = "max") val max: Float?,
+            @Json(name = "night") val night: Float?,
+            @Json(name = "eve") val evening: Float?,
+            @Json(name = "morn") val morning: Float?,
         )
 
         @JsonClass(generateAdapter = true)
         data class FeelsLike(
-            @Json(name = "day") val day: Double?,
-            @Json(name = "night") val night: Double?,
-            @Json(name = "eve") val evening: Double?,
-            @Json(name = "morn") val morning: Double?,
+            @Json(name = "day") val day: Float?,
+            @Json(name = "night") val night: Float?,
+            @Json(name = "eve") val evening: Float?,
+            @Json(name = "morn") val morning: Float?,
         )
     }
 
