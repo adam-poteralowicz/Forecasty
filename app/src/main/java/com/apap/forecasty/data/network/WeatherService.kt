@@ -8,7 +8,7 @@ private const val DEFAULT_MEASUREMENT_UNITS = "metric"
 
 interface WeatherService {
 
-    @GET("/onecall")
+    @GET("onecall")
     suspend fun getCurrentForecast(
         @Query("lat") latitude: String,
         @Query("lon") longitude: String,

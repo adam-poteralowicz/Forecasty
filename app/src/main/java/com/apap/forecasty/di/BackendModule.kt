@@ -16,7 +16,7 @@ import java.time.Duration
 @InstallIn(SingletonComponent::class)
 object BackendModule {
 
-    private const val baseUrl = "https://api.openweathermap.org/data/2.5"
+    private const val baseUrl = "https://api.openweathermap.org/data/2.5/"
 
     @Provides
     @Singleton

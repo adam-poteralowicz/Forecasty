@@ -5,17 +5,19 @@ import com.apap.forecasty.domain.model.*
 
 class ApiParseException(message: String = "") : Exception(message)
 
-fun ForecastResponse.toForecast() = Forecast(
-    latitude = latitude ?: throw ApiParseException("latitude == null"),
-    longitude = longitude ?: throw ApiParseException("longitude == null"),
-    timezone = timezone ?: throw ApiParseException("timezone == null"),
-    timezoneOffset = timezoneOffset ?: throw ApiParseException("timezone offset == null"),
-    currentForecast = current.extractCurrentForecast(),
-    minutelyForecast = minutely.extractMinutelyForecast(),
-    hourlyForecast = hourly.extractHourlyForecast(),
-    dailyForecast = daily.extractDailyForecast(),
-    weatherAlerts = alerts.extractAlerts()
-)
+fun ForecastResponse?.toForecast() = this?.run {
+    Forecast(
+        latitude = latitude ?: throw ApiParseException("latitude == null"),
+        longitude = longitude ?: throw ApiParseException("longitude == null"),
+        timezone = timezone ?: throw ApiParseException("timezone == null"),
+        timezoneOffset = timezoneOffset ?: throw ApiParseException("timezone offset == null"),
+        currentForecast = current.extractCurrentForecast(),
+        minutelyForecast = minutely.extractMinutelyForecast(),
+        hourlyForecast = hourly.extractHourlyForecast(),
+        dailyForecast = daily.extractDailyForecast(),
+        weatherAlerts = alerts.extractAlerts()
+    )
+}
 
 private fun ForecastResponse.Current?.extractCurrentForecast() = this?.run {
     CurrentForecast(

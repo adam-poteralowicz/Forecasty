@@ -3,6 +3,7 @@ ext.versions = [
     composeFoundation: '1.2.0-alpha04',
     composeMaterial: '1.0.0-alpha06',
     hilt: '2.40.5',
+    hiltNavigationCompose: '1.0.0',
     moshi: '1.13.0',
     moshix: '0.16.7',
     moshiConverter: '2.4.0',
@@ -27,6 +28,7 @@ ext.deps = [
         compiler: "com.google.dagger:hilt-compiler:$versions.hilt",
         runtime: "com.google.dagger:hilt-android:$versions.hilt",
     ],
+    hiltNavigationCompose: "androidx.hilt:hilt-navigation-compose:$versions.hiltNavigationCompose",
     moshi: [
             codegen: "com.squareup.moshi:moshi-kotlin-codegen:$versions.moshi",
             core: "com.squareup.moshi:moshi:$versions.moshi",
