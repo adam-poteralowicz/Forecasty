@@ -6,9 +6,7 @@ import com.apap.forecasty.domain.model.Forecast
 import com.apap.forecasty.domain.usecase.GetForecast
 import com.apap.forecasty.presentation.view.LoadingState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,8 +16,8 @@ class WelcomeViewModel @Inject constructor(
     private val getForecast: GetForecast
 ) : ViewModel() {
 
-    private val _forecast = MutableSharedFlow<Forecast>()
-    val forecast = _forecast.asSharedFlow()
+    private val _forecast = MutableStateFlow<Forecast?>(null)
+    val forecast = _forecast.asStateFlow()
 
     private val _loadingStateFlow = MutableStateFlow(LoadingState.Idle)
     val loadingStateFlow = _loadingStateFlow.asStateFlow()
