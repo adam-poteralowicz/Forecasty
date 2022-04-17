@@ -3,7 +3,9 @@ package com.apap.forecasty.presentation.view
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Text
@@ -31,11 +33,12 @@ fun WelcomeScreen(
 
     val forecast by viewModel.forecast.collectAsState()
     val state by viewModel.loadingStateFlow.collectAsState()
+    val isLightTheme = isSystemInDarkTheme().not()
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(ForecastyBlue)
+            .background(if (isLightTheme) ForecastyBlue else Color.Black)
     ) {
         Toolbar()
         LoadingComponent(
@@ -51,16 +54,24 @@ fun WelcomeScreen(
             verticalArrangement = Arrangement.Bottom,
         ) {
             Image(
-                painterResource(
-                    id = R.drawable.ic_weather
-                ),
+                painterResource(id = R.drawable.ic_weather),
                 contentDescription = null,
                 Modifier
                     .scale(5f)
                     .padding(PaddingValues(bottom = 85.dp))
             )
-            Button(onClick = { viewModel.onProceedClicked() }) {
-                Text(text = "Proceed", color = ForecastyBlue, fontWeight = FontWeight.Bold)
+            Button(
+                onClick = { viewModel.onProceedClicked() },
+                Modifier.background(
+                    color = if (isLightTheme) Color.White else ForecastyBlue,
+                    shape = CircleShape
+                )
+            ) {
+                Text(
+                    text = "Proceed",
+                    color = if (isLightTheme) ForecastyBlue else Color.Black,
+                    fontWeight = FontWeight.Bold,
+                )
             }
         }
     }
@@ -68,11 +79,13 @@ fun WelcomeScreen(
 
 @Composable
 fun Toolbar() {
+    val isLightTheme = isSystemInDarkTheme().not()
+
     CenterAlignedTopAppBar(
         title = {
             Text(
                 text = stringResource(id = R.string.app_name),
-                color = Color.White,
+                color = if (isLightTheme) Color.White else ForecastyBlue,
                 fontWeight = FontWeight.ExtraBold
             )
         },
