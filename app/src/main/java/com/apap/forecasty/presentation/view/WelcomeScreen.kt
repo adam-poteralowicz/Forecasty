@@ -22,6 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.apap.forecasty.R
+import com.apap.forecasty.domain.model.Forecast
 import com.apap.forecasty.presentation.viewModel.WelcomeViewModel
 import com.apap.forecasty.ui.theme.ForecastyBlue
 
@@ -29,6 +30,7 @@ import com.apap.forecasty.ui.theme.ForecastyBlue
 @Composable
 fun WelcomeScreen(
     viewModel: WelcomeViewModel = hiltViewModel(),
+    navigateToWeather: (Forecast) -> Unit,
 ) {
 
     val forecast by viewModel.forecast.collectAsState()
@@ -42,7 +44,7 @@ fun WelcomeScreen(
     ) {
         Toolbar()
         LoadingComponent(
-            success = {},
+            success = { forecast?.let { navigateToWeather(it) } },
             error = {},
             loadingState = state,
         )
