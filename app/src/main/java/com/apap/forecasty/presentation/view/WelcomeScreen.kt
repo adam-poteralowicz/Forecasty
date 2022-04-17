@@ -42,7 +42,7 @@ fun WelcomeScreen(
             .fillMaxSize()
             .background(if (isLightTheme) ForecastyBlue else Color.Black)
     ) {
-        Toolbar()
+        Toolbar(isLightTheme)
         LoadingComponent(
             success = { forecast?.let { navigateToWeather(it) } },
             error = {},
@@ -80,8 +80,7 @@ fun WelcomeScreen(
 }
 
 @Composable
-fun Toolbar() {
-    val isLightTheme = isSystemInDarkTheme().not()
+fun Toolbar(isLightTheme: Boolean) {
 
     CenterAlignedTopAppBar(
         title = {
