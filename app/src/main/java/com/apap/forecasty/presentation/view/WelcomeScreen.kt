@@ -6,6 +6,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material3.Button
@@ -14,12 +16,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.apap.forecasty.R
@@ -27,7 +32,10 @@ import com.apap.forecasty.domain.model.Forecast
 import com.apap.forecasty.presentation.viewModel.WelcomeViewModel
 import com.apap.forecasty.ui.theme.ForecastyBlue
 
-@OptIn(ExperimentalAnimationApi::class)
+@OptIn(
+    ExperimentalAnimationApi::class,
+    ExperimentalComposeUiApi::class
+)
 @Composable
 fun WelcomeScreen(
     viewModel: WelcomeViewModel = hiltViewModel(),
@@ -38,6 +46,7 @@ fun WelcomeScreen(
     val state by viewModel.loadingStateFlow.collectAsState()
     val isLightTheme = isSystemInDarkTheme().not()
 
+    val keyboardController = LocalSoftwareKeyboardController.current
     var city by rememberSaveable { mutableStateOf("") }
 
     Box(
@@ -87,7 +96,11 @@ fun WelcomeScreen(
                     textColor = if (isLightTheme) Color.White else ForecastyBlue,
                     focusedBorderColor = if (isLightTheme) Color.White else ForecastyBlue,
                     unfocusedBorderColor = if (isLightTheme) Color.White else ForecastyBlue,
-                )
+                ),
+                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(onDone = {
+                    keyboardController?.hide()
+                }),
             )
             Button(
                 onClick = { viewModel.onProceedClicked() },
