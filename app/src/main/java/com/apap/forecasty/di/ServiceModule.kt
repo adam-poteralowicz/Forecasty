@@ -1,5 +1,6 @@
 package com.apap.forecasty.di
 
+import com.apap.forecasty.data.network.GeolocationService
 import com.apap.forecasty.data.network.WeatherService
 import dagger.Module
 import dagger.Provides
@@ -14,4 +15,7 @@ object ServiceModule {
 
     @Provides
     fun weatherService(retrofit: Retrofit): WeatherService = retrofit.create()
+
+    @Provides
+    fun geolocationService(retrofit: Retrofit): GeolocationService = retrofit.create()
 }
