@@ -6,13 +6,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -37,6 +37,8 @@ fun WelcomeScreen(
     val forecast by viewModel.forecast.collectAsState()
     val state by viewModel.loadingStateFlow.collectAsState()
     val isLightTheme = isSystemInDarkTheme().not()
+
+    var city by rememberSaveable { mutableStateOf("") }
 
     Box(
         modifier = Modifier
@@ -67,7 +69,25 @@ fun WelcomeScreen(
                 contentDescription = null,
                 Modifier
                     .scale(5f)
-                    .padding(PaddingValues(bottom = 85.dp))
+                    .padding(PaddingValues(bottom = 50.dp))
+            )
+            OutlinedTextField(
+                value = city,
+                onValueChange = { city = it },
+                Modifier.padding(PaddingValues(bottom = 60.dp)),
+                label = {
+                    Text(
+                        text = "Choose location",
+                        color = if (isLightTheme) Color.White else ForecastyBlue,
+                    )
+                },
+                singleLine = true,
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    cursorColor = if (isLightTheme) Color.White else ForecastyBlue,
+                    textColor = if (isLightTheme) Color.White else ForecastyBlue,
+                    focusedBorderColor = if (isLightTheme) Color.White else ForecastyBlue,
+                    unfocusedBorderColor = if (isLightTheme) Color.White else ForecastyBlue,
+                )
             )
             Button(
                 onClick = { viewModel.onProceedClicked() },

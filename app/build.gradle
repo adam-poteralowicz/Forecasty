@@ -59,6 +59,7 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation deps.androidX.compose.ui
     implementation deps.androidX.compose.material
+    implementation deps.androidX.compose.material3
     implementation deps.androidX.compose.uiTooling.preview
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
     implementation 'androidx.activity:activity-compose:1.3.1'

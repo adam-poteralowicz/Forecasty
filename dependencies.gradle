@@ -14,7 +14,8 @@ ext.deps = [
     androidX: [
         compose: [
             foundation : "androidx.compose.foundation:foundation:$versions.compose",
-            material   : "androidx.compose.material3:material3:$versions.composeMaterial",
+            material   : "androidx.compose.material:material:$versions.compose",
+            material3   : "androidx.compose.material3:material3:$versions.composeMaterial",
             ui         : "androidx.compose.ui:ui:$versions.compose",
             uiTest     : "androidx.compose.ui:ui-test:$versions.compose",
             uiTestJUnit: "androidx.compose.ui:ui-test-junit4:$versions.compose",
