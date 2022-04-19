@@ -22,11 +22,13 @@ import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.apap.forecasty.R
 import com.apap.forecasty.domain.model.Forecast
+import com.apap.forecasty.presentation.viewModel.WeatherViewModel
 import com.apap.forecasty.ui.theme.ForecastyBlue
+import com.apap.forecasty.util.round
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -44,10 +46,10 @@ fun CurrentWeather(
     forecast: Forecast?,
     city: String?,
     isLightTheme: Boolean,
+    viewModel: WeatherViewModel = hiltViewModel()
 ) {
     forecast ?: return
     val currentDate = LocalDateTime.now()
-    val isNight: Boolean = currentDate.hour < 6 || currentDate.hour > 18
 
     Column(modifier = Modifier
         .background(if (isLightTheme) ForecastyBlue else Color.Black)
@@ -56,26 +58,26 @@ fun CurrentWeather(
     ) {
         Toolbar(isLightTheme)
         Column(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
                 .padding(top = 8.dp, bottom = 8.dp, start = 16.dp, end = 16.dp),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             DateAndLocation(
-                currentDate.format(DateTimeFormatter.ISO_DATE).toString(),
+                viewModel.formatDate(currentDate),
                 city ?: forecast.timezone,
                 isLightTheme
             )
             WeatherImage(
-                modifier = Modifier.fillMaxWidth().scale(5f),
-                imageResId = when (forecast.currentConditions) {
-                    "Clear" -> if (isNight) R.drawable.ic_night else R.drawable.ic_day
-                    "Clouds" -> R.drawable.ic_cloudy
-                    "Rain" -> R.drawable.ic_rainy
-                    "Snow" -> R.drawable.ic_snowy
-                    else -> R.drawable.ic_day
-                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .scale(5f),
+                imageResId = viewModel.getImageForWeather(
+                    conditions = forecast.currentConditions,
+                    time = currentDate.hour,
+                )
             )
-            TemperatureText(forecast.currentTemperature, isLightTheme)
+            TemperatureText(forecast.currentTemperature.round(), isLightTheme)
         }
     }
 }
@@ -98,6 +100,7 @@ fun DateAndLocation(
     date: String,
     location: String,
     isLightTheme: Boolean,
+    viewModel: WeatherViewModel = hiltViewModel()
 ) {
     Column(
         modifier = Modifier
@@ -107,7 +110,7 @@ fun DateAndLocation(
         Text(
             text = date,
             fontWeight = FontWeight.Medium,
-            color = if (isLightTheme) Color.White else ForecastyBlue,
+            color = viewModel.getColorForTheme(isLightTheme),
             style = MaterialTheme.typography.titleMedium,
         )
         Spacer(modifier = Modifier.size(4.dp))
@@ -123,7 +126,7 @@ fun DateAndLocation(
             Text(
                 text = location,
                 fontWeight = FontWeight.Bold,
-                color = if (isLightTheme) Color.White else ForecastyBlue,
+                color = viewModel.getColorForTheme(isLightTheme),
                 style = MaterialTheme.typography.titleLarge,
             )
         }
@@ -150,6 +153,7 @@ fun LocationImage(
 fun TemperatureText(
     temperature: String,
     isLightTheme: Boolean,
+    viewModel: WeatherViewModel = hiltViewModel()
 ) {
 
     Column(
@@ -161,7 +165,7 @@ fun TemperatureText(
             Modifier.padding(PaddingValues(bottom = 75.dp)),
             fontWeight = FontWeight.ExtraBold,
             fontSize = TextUnit(value = 48f, type = TextUnitType.Sp),
-            color = if (isLightTheme) Color.White else ForecastyBlue,
+            color = viewModel.getColorForTheme(isLightTheme),
         )
     }
 }

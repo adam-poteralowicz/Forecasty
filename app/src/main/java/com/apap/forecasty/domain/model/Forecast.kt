@@ -21,5 +21,5 @@ data class Forecast(
     val currentConditions = currentForecast.weather[0].main
 
     @IgnoredOnParcel
-    val currentTemperature = currentForecast.temperature.toString()
+    val currentTemperature = currentForecast.temperature
 }
