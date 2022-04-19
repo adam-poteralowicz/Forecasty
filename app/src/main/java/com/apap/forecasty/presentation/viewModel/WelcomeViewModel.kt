@@ -1,5 +1,8 @@
 package com.apap.forecasty.presentation.viewModel
 
+import androidx.compose.material.TextFieldDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.apap.forecasty.domain.model.Forecast
@@ -7,6 +10,7 @@ import com.apap.forecasty.domain.model.Geolocation
 import com.apap.forecasty.domain.usecase.Geolocate
 import com.apap.forecasty.domain.usecase.GetForecast
 import com.apap.forecasty.presentation.view.LoadingState
+import com.apap.forecasty.ui.theme.ForecastyBlue
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -37,7 +41,6 @@ class WelcomeViewModel @Inject constructor(
     }
 
     private fun loadForecast(geolocationData: Geolocation) = viewModelScope.launch {
-
         _loadingStateFlow.value = LoadingState.Pending
         val forecast = getForecast(geolocationData.latitude, geolocationData.longitude)
         if (forecast == null) {
@@ -51,5 +54,18 @@ class WelcomeViewModel @Inject constructor(
     fun onLocationChosen(city: String) = viewModelScope.launch {
         val geolocation = geolocate(city)
         geolocation?.let { _geolocation.emit(geolocation) }
+    }
+
+    @Composable
+    fun setOutlinedTextFieldColors(isLightTheme: Boolean) =
+        TextFieldDefaults.outlinedTextFieldColors(
+            cursorColor = getColorForTheme(isLightTheme),
+            textColor = getColorForTheme(isLightTheme),
+            focusedBorderColor = getColorForTheme(isLightTheme),
+            unfocusedBorderColor = getColorForTheme(isLightTheme),
+        )
+
+    fun getColorForTheme(isLightTheme: Boolean) : Color {
+        return if (isLightTheme) Color.White else ForecastyBlue
     }
 }

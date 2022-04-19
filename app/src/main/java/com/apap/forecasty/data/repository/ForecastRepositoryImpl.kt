@@ -9,7 +9,6 @@ class ForecastRepositoryImpl @Inject constructor(
     private val service: WeatherService,
 ) : ForecastRepository {
 
-    // TODO: Retrieve forecast for input location
     override suspend fun getForecast(
         latitude: Float,
         longitude: Float,

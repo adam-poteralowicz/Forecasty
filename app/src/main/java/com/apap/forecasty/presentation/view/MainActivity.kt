@@ -31,7 +31,7 @@ class MainActivity : ComponentActivity() {
                         WelcomeScreen(navigateToWeather = { forecast, city ->
                             val bundle = Bundle()
                             bundle.putParcelable("forecast", forecast)
-                            city?.let { bundle.putString("city", city) }
+                            bundle.putString("city", city)
                             navController.navigateWithForecast(
                                 route = WEATHER,
                                 args = bundle,

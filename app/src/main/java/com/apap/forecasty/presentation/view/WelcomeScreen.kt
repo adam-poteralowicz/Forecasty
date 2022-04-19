@@ -9,7 +9,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Text
@@ -39,7 +38,7 @@ import com.apap.forecasty.ui.theme.ForecastyBlue
 @Composable
 fun WelcomeScreen(
     viewModel: WelcomeViewModel = hiltViewModel(),
-    navigateToWeather: (Forecast, String?) -> Unit,
+    navigateToWeather: (Forecast, String) -> Unit,
 ) {
 
     val forecast by viewModel.forecast.collectAsState()
@@ -58,12 +57,13 @@ fun WelcomeScreen(
         Toolbar(isLightTheme)
         LoadingComponent(
             success = {
-                forecast?.let {
-                    LaunchedEffect(Unit) {
-                        navigateToWeather(
-                            it,
-                            geolocation?.let { if (it.isNotEmpty()) it[0].city else null }
-                        )
+                forecast?.let { forecast ->
+                    geolocation?.let { it ->
+                        if (it.isNotEmpty()) {
+                            LaunchedEffect(Unit) {
+                                navigateToWeather(forecast, it[0].city)
+                            }
+                        }
                     }
                 }
             },
@@ -95,12 +95,7 @@ fun WelcomeScreen(
                     )
                 },
                 singleLine = true,
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    cursorColor = if (isLightTheme) Color.White else ForecastyBlue,
-                    textColor = if (isLightTheme) Color.White else ForecastyBlue,
-                    focusedBorderColor = if (isLightTheme) Color.White else ForecastyBlue,
-                    unfocusedBorderColor = if (isLightTheme) Color.White else ForecastyBlue,
-                ),
+                colors = viewModel.setOutlinedTextFieldColors(isLightTheme),
                 keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
                 keyboardActions = KeyboardActions(onDone = {
                     keyboardController?.hide()
@@ -110,7 +105,7 @@ fun WelcomeScreen(
             Button(
                 onClick = { viewModel.onProceedClicked(geolocation) },
                 Modifier.background(
-                    color = if (isLightTheme) Color.White else ForecastyBlue,
+                    color = viewModel.getColorForTheme(isLightTheme),
                     shape = CircleShape
                 )
             ) {
