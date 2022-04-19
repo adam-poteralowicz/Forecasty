@@ -28,9 +28,10 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 NavHost(navController = navController, startDestination = WELCOME) {
                     composable(WELCOME) {
-                        WelcomeScreen(navigateToWeather = { forecast ->
+                        WelcomeScreen(navigateToWeather = { forecast, city ->
                             val bundle = Bundle()
                             bundle.putParcelable("forecast", forecast)
+                            city?.let { bundle.putString("city", city) }
                             navController.navigateWithForecast(
                                 route = WEATHER,
                                 args = bundle,
@@ -38,7 +39,10 @@ class MainActivity : ComponentActivity() {
                         })
                     }
                     composable(WEATHER) { entry ->
-                        WeatherScreen(entry.arguments?.getParcelable("forecast"))
+                        WeatherScreen(
+                            forecast = entry.arguments?.getParcelable("forecast"),
+                            city = entry.arguments?.getString("city")
+                        )
                     }
                 }
             }

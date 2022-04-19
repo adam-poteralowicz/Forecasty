@@ -8,5 +8,8 @@ class GetForecast @Inject constructor(
     private val forecastRepository: ForecastRepository,
 ) {
 
-    suspend operator fun invoke(): Forecast? = forecastRepository.getForecast().getOrNull()
+    suspend operator fun invoke(
+        latitude: Float,
+        longitude: Float,
+    ): Forecast? = forecastRepository.getForecast(latitude, longitude).getOrNull()
 }

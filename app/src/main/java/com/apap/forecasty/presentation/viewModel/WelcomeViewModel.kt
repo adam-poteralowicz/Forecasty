@@ -3,6 +3,8 @@ package com.apap.forecasty.presentation.viewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.apap.forecasty.domain.model.Forecast
+import com.apap.forecasty.domain.model.Geolocation
+import com.apap.forecasty.domain.usecase.Geolocate
 import com.apap.forecasty.domain.usecase.GetForecast
 import com.apap.forecasty.presentation.view.LoadingState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,28 +15,41 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WelcomeViewModel @Inject constructor(
-    private val getForecast: GetForecast
+    private val getForecast: GetForecast,
+    private val geolocate: Geolocate,
 ) : ViewModel() {
 
     private val _forecast = MutableStateFlow<Forecast?>(null)
     val forecast = _forecast.asStateFlow()
 
+    private val _geolocation = MutableStateFlow<List<Geolocation>?>(emptyList())
+    val geolocation = _geolocation.asStateFlow()
+
     private val _loadingStateFlow = MutableStateFlow(LoadingState.Idle)
     val loadingStateFlow = _loadingStateFlow.asStateFlow()
 
-    fun onProceedClicked() {
-        loadForecast()
+    fun onProceedClicked(geolocationData: List<Geolocation>?) {
+        geolocationData?.let {
+            if (it.isNotEmpty()) {
+                loadForecast(it[0])
+            }
+        }
     }
 
-    private fun loadForecast() = viewModelScope.launch {
+    private fun loadForecast(geolocationData: Geolocation) = viewModelScope.launch {
 
         _loadingStateFlow.value = LoadingState.Pending
-        val forecast = getForecast()
+        val forecast = getForecast(geolocationData.latitude, geolocationData.longitude)
         if (forecast == null) {
             _loadingStateFlow.value = LoadingState.Failure
         } else {
             _loadingStateFlow.value = LoadingState.Done
             _forecast.emit(forecast)
         }
+    }
+
+    fun onLocationChosen(city: String) = viewModelScope.launch {
+        val geolocation = geolocate(city)
+        geolocation?.let { _geolocation.emit(geolocation) }
     }
 }

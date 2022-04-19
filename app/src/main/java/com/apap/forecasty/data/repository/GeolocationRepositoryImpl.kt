@@ -1,5 +1,6 @@
 package com.apap.forecasty.data.repository
 
+import android.util.Log
 import com.apap.forecasty.BuildConfig
 import com.apap.forecasty.data.network.GeolocationService
 import com.apap.forecasty.domain.mapper.toGeolocation
@@ -10,9 +11,11 @@ class GeolocationRepositoryImpl @Inject constructor(
 ): GeolocationRepository {
 
     override suspend fun getGeolocationForCity(city: String) = Result.runCatching {
-        service.getGeolocationForCity(
+        val geolocation = service.getGeolocationForCity(
             city = city,
             appId = BuildConfig.WEATHER_API_KEY
-        ).toGeolocation()
+        )
+        Log.d("Geolocation", geolocation.toString())
+        geolocation.toGeolocation()
     }
 }

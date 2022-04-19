@@ -39,10 +39,11 @@ import com.apap.forecasty.ui.theme.ForecastyBlue
 @Composable
 fun WelcomeScreen(
     viewModel: WelcomeViewModel = hiltViewModel(),
-    navigateToWeather: (Forecast) -> Unit,
+    navigateToWeather: (Forecast, String?) -> Unit,
 ) {
 
     val forecast by viewModel.forecast.collectAsState()
+    val geolocation by viewModel.geolocation.collectAsState()
     val state by viewModel.loadingStateFlow.collectAsState()
     val isLightTheme = isSystemInDarkTheme().not()
 
@@ -59,7 +60,10 @@ fun WelcomeScreen(
             success = {
                 forecast?.let {
                     LaunchedEffect(Unit) {
-                        navigateToWeather(it)
+                        navigateToWeather(
+                            it,
+                            geolocation?.let { if (it.isNotEmpty()) it[0].city else null }
+                        )
                     }
                 }
             },
@@ -100,10 +104,11 @@ fun WelcomeScreen(
                 keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
                 keyboardActions = KeyboardActions(onDone = {
                     keyboardController?.hide()
+                    viewModel.onLocationChosen(city)
                 }),
             )
             Button(
-                onClick = { viewModel.onProceedClicked() },
+                onClick = { viewModel.onProceedClicked(geolocation) },
                 Modifier.background(
                     color = if (isLightTheme) Color.White else ForecastyBlue,
                     shape = CircleShape

@@ -30,11 +30,11 @@ import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun WeatherScreen (forecast: Forecast?) {
+fun WeatherScreen (forecast: Forecast?, city: String?) {
     val isLightTheme = isSystemInDarkTheme().not()
 
     Surface(Modifier.fillMaxSize()) {
-        CurrentWeather(forecast, isLightTheme)
+        CurrentWeather(forecast, city, isLightTheme)
     }
 }
 
@@ -42,6 +42,7 @@ fun WeatherScreen (forecast: Forecast?) {
 @Composable
 fun CurrentWeather(
     forecast: Forecast?,
+    city: String?,
     isLightTheme: Boolean,
 ) {
     forecast ?: return
@@ -61,7 +62,7 @@ fun CurrentWeather(
         ) {
             DateAndLocation(
                 currentDate.format(DateTimeFormatter.ISO_DATE).toString(),
-                forecast.timezone,
+                city ?: forecast.timezone,
                 isLightTheme
             )
             WeatherImage(
