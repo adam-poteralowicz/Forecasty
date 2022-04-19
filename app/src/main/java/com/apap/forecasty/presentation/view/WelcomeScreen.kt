@@ -61,7 +61,7 @@ fun WelcomeScreen(
                     geolocation?.let { it ->
                         if (it.isNotEmpty()) {
                             LaunchedEffect(Unit) {
-                                navigateToWeather(forecast, it[0].city)
+                                navigateToWeather(forecast, "${it[0].city}, ${it[0].country}")
                             }
                         }
                     }
