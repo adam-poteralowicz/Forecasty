@@ -3,6 +3,7 @@ package com.apap.forecasty.presentation.view
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -48,6 +49,7 @@ fun WelcomeScreen(
 
     val keyboardController = LocalSoftwareKeyboardController.current
     var city by rememberSaveable { mutableStateOf("") }
+    var isLocationConfirmed by rememberSaveable { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
@@ -62,6 +64,7 @@ fun WelcomeScreen(
                         if (it.isNotEmpty()) {
                             LaunchedEffect(Unit) {
                                 navigateToWeather(forecast, "${it[0].city}, ${it[0].country}")
+                                isLocationConfirmed = false
                             }
                         }
                     }
@@ -86,28 +89,39 @@ fun WelcomeScreen(
             )
             OutlinedTextField(
                 value = city,
-                onValueChange = { city = it },
-                Modifier.padding(PaddingValues(bottom = 60.dp)),
+                onValueChange = {
+                    isLocationConfirmed = false
+                    city = it
+                },
+                Modifier.padding(PaddingValues(bottom = 30.dp)),
                 label = {
                     Text(
                         text = "Choose location",
-                        color = if (isLightTheme) Color.White else ForecastyBlue,
+                        color = viewModel.getColorForTheme(isLightTheme),
                     )
                 },
                 singleLine = true,
                 colors = viewModel.setOutlinedTextFieldColors(isLightTheme),
                 keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
-                keyboardActions = KeyboardActions(onDone = {
-                    keyboardController?.hide()
-                    viewModel.onLocationChosen(city)
-                }),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        keyboardController?.hide()
+                        isLocationConfirmed = true
+                        viewModel.onLocationChosen(city)
+                    }
+                ),
             )
             Button(
                 onClick = { viewModel.onProceedClicked(geolocation) },
-                Modifier.background(
-                    color = viewModel.getColorForTheme(isLightTheme),
-                    shape = CircleShape
-                )
+                Modifier
+                    .background(
+                        color = viewModel.getColorForTheme(isLightTheme),
+                        shape = CircleShape
+                    )
+                    .clickable(enabled = isLocationConfirmed, onClick = {
+                        viewModel.onLocationChosen(city)
+                        viewModel.onProceedClicked(geolocation)
+                    })
             ) {
                 Text(
                     text = "Proceed",

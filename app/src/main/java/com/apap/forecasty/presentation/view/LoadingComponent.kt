@@ -4,13 +4,12 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
+import com.apap.forecasty.ui.theme.ForecastyBlue
 
 @ExperimentalAnimationApi
 @Composable
@@ -35,18 +34,13 @@ fun LoadingComponent(
 fun LoadingIndicator() {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize().shadow(2.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
             CircularProgressIndicator(
-                color = MaterialTheme.colorScheme.secondary,
+                color = ForecastyBlue,
                 modifier = Modifier.size(60.dp).align(Alignment.CenterHorizontally)
-            )
-            Text(
-                text = "Positioning satellites...",
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(PaddingValues(top = 32.dp)),
             )
         }
     }
