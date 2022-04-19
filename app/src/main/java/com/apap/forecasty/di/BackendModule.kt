@@ -11,8 +11,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
 
-private const val NO_BASE_URL = "http://localhost"
-
 @Module
 @InstallIn(SingletonComponent::class)
 object BackendModule {
@@ -30,7 +28,7 @@ object BackendModule {
     @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient, moshi: Moshi): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(NO_BASE_URL)
+            .baseUrl("https://api.openweathermap.org/")
             .client(okHttpClient)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
