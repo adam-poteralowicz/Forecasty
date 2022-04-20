@@ -78,7 +78,13 @@ dependencies {
     implementation deps.moshix.adapters
     kapt deps.moshi.codegen
 
-    testImplementation 'junit:junit:4.13.2'
+    testImplementation deps.androidX.archCoreTesting
+    testImplementation deps.assertJ
+    testImplementation deps.junit
+    testImplementation deps.kotlinCoroutines.test
+    testImplementation deps.mockk
+    testImplementation deps.turbine
+
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     androidTestImplementation deps.androidX.compose.uiTestJUnit

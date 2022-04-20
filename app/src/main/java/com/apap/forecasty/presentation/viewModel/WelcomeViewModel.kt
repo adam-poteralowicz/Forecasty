@@ -19,8 +19,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WelcomeViewModel @Inject constructor(
-    private val getForecast: GetForecast,
     private val geolocate: Geolocate,
+    private val getForecast: GetForecast,
 ) : ViewModel() {
 
     private val _forecast = MutableStateFlow<Forecast?>(null)
