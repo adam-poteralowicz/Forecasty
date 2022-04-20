@@ -85,8 +85,11 @@ dependencies {
     testImplementation deps.mockk
     testImplementation deps.turbine
 
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    androidTestImplementation deps.androidX.compose.uiTest
     androidTestImplementation deps.androidX.compose.uiTestJUnit
+    androidTestImplementation deps.androidX.test.espresso
+    androidTestImplementation deps.androidX.test.espressoIntents
+    androidTestImplementation deps.androidX.test.extJunit
+    androidTestImplementation deps.barista
     debugImplementation deps.androidX.compose.uiTooling.core
 }

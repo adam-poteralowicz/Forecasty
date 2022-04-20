@@ -1,9 +1,12 @@
 ext.versions = [
     archCoreTesting: '2.1.0',
     assertJ: '3.22.0',
+    barista: '4.2.0',
     compose: '1.1.1',
     composeFoundation: '1.2.0-alpha04',
     composeMaterial: '1.0.0-alpha06',
+    espressoCore: '3.4.0',
+    extJunit: '1.1.3',
     hilt: '2.40.5',
     hiltNavigationCompose: '1.0.0',
     junit: '4.13.2',
@@ -31,8 +34,14 @@ ext.deps = [
                 preview: "androidx.compose.ui:ui-tooling-preview:$versions.compose",
             ],
         ],
+        test: [
+            espresso: "androidx.test.espresso:espresso-core:$versions.espressoCore",
+            espressoIntents: "androidx.test.espresso:espresso-intents:$versions.espressoCore",
+            extJunit: "androidx.test.ext:junit:$versions.extJunit",
+        ]
     ],
     assertJ: "org.assertj:assertj-core:$versions.assertJ",
+    barista: "com.adevinta.android:barista:$versions.barista",
     hilt: [
         compiler: "com.google.dagger:hilt-compiler:$versions.hilt",
         runtime: "com.google.dagger:hilt-android:$versions.hilt",

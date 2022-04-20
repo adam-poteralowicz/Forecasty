@@ -11,5 +11,8 @@
       </map>
     </option>
   </component>
+  <component name="ProjectPlainTextFileTypeManager">
+    <file url="file://$PROJECT_DIR$/app/src/androidTest/java/com/apap/forecasty/ExampleInstrumentedTest.kt" />
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="JDK" project-jdk-type="JavaSDK" />
 </project>
