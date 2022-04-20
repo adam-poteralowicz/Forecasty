@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.TextUnit
@@ -161,7 +162,7 @@ fun TemperatureText(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
-            text = "$temperature °C",
+            text = stringResource(id = R.string.celsius_degrees, formatArgs = arrayOf(temperature)),
             Modifier.padding(PaddingValues(bottom = 75.dp)),
             fontWeight = FontWeight.ExtraBold,
             fontSize = TextUnit(value = 48f, type = TextUnitType.Sp),
