@@ -22,9 +22,7 @@ class WeatherViewModel @Inject constructor() : ViewModel() {
 
     private fun isNight(time: Int) = time !in (6..18)
 
-    fun getColorForTheme(isLightTheme: Boolean) : Color {
-        return if (isLightTheme) Color.White else ForecastyBlue
-    }
+    fun getColorForTheme(isLightTheme: Boolean) = if (isLightTheme) Color.White else ForecastyBlue
 
     fun formatDate(date: LocalDateTime) = date.format(DateTimeFormatter.ISO_DATE).toString()
 }

@@ -13,7 +13,6 @@ class ForecastRepositoryImpl @Inject constructor(
         latitude: Float,
         longitude: Float,
     ) = Result.runCatching {
-        // TODO: Retrieve current location
         service.getCurrentForecast(
             latitude = latitude.toString(),
             longitude = longitude.toString(),

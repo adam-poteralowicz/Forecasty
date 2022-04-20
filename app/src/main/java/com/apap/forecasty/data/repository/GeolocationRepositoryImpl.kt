@@ -1,6 +1,5 @@
 package com.apap.forecasty.data.repository
 
-import android.util.Log
 import com.apap.forecasty.BuildConfig
 import com.apap.forecasty.data.network.GeolocationService
 import com.apap.forecasty.domain.mapper.toGeolocation
@@ -15,7 +14,6 @@ class GeolocationRepositoryImpl @Inject constructor(
             city = city,
             appId = BuildConfig.WEATHER_API_KEY
         )
-        Log.d("Geolocation", geolocation.toString())
         geolocation.toGeolocation()
     }
 }

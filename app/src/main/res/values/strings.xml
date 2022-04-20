@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Forecasty</string>
+    <string name="proceed_button_text">Proceed</string>
+    <string name="choose_location">Choose location</string>
 </resources>

@@ -16,11 +16,7 @@ fun NavController.navigateWithForecast(
         .build()
 
     val deepLinkMatch = graph.matchDeepLink(routeLink)
-    if (deepLinkMatch != null) {
-        val destination = deepLinkMatch.destination
-        val id = destination.id
-        navigate(id, args, navOptions, navigatorExtras)
-    } else {
-        navigate(route, navOptions, navigatorExtras)
-    }
+    deepLinkMatch?.let {
+        navigate(it.destination.id, args, navOptions, navigatorExtras)
+    } ?: navigate(route, navOptions, navigatorExtras)
 }

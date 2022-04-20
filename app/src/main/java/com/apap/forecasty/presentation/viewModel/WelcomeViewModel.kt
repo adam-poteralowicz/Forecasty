@@ -65,7 +65,5 @@ class WelcomeViewModel @Inject constructor(
             unfocusedBorderColor = getColorForTheme(isLightTheme),
         )
 
-    fun getColorForTheme(isLightTheme: Boolean) : Color {
-        return if (isLightTheme) Color.White else ForecastyBlue
-    }
+    fun getColorForTheme(isLightTheme: Boolean) = if (isLightTheme) Color.White else ForecastyBlue
 }

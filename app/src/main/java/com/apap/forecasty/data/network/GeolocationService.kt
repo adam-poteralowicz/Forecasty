@@ -11,5 +11,4 @@ interface GeolocationService {
         @Query("q") city: String,
         @Query("appid") appId: String,
     ): List<GeolocationResponse>
-
 }

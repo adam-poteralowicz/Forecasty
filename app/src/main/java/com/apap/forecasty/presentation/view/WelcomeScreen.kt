@@ -96,7 +96,7 @@ fun WelcomeScreen(
                 Modifier.padding(PaddingValues(bottom = 30.dp)),
                 label = {
                     Text(
-                        text = "Choose location",
+                        text = stringResource(R.string.choose_location),
                         color = viewModel.getColorForTheme(isLightTheme),
                     )
                 },
@@ -118,13 +118,15 @@ fun WelcomeScreen(
                         color = viewModel.getColorForTheme(isLightTheme),
                         shape = CircleShape
                     )
-                    .clickable(enabled = isLocationConfirmed, onClick = {
-                        viewModel.onLocationChosen(city)
-                        viewModel.onProceedClicked(geolocation)
-                    })
+                    .clickable(
+                        enabled = isLocationConfirmed,
+                        onClick = {
+                            viewModel.onLocationChosen(city)
+                            viewModel.onProceedClicked(geolocation)
+                        })
             ) {
                 Text(
-                    text = "Proceed",
+                    text = stringResource(R.string.proceed_button_text),
                     color = if (isLightTheme) ForecastyBlue else Color.Black,
                     fontWeight = FontWeight.Bold,
                 )
