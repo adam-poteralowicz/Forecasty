@@ -9,6 +9,8 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
+private const val WEATHER_NOT_SUPPORTED = 0
+
 @HiltViewModel
 class WeatherViewModel @Inject constructor() : ViewModel() {
 
@@ -17,7 +19,7 @@ class WeatherViewModel @Inject constructor() : ViewModel() {
         "Clouds" -> R.drawable.ic_cloudy
         "Rain" -> R.drawable.ic_rainy
         "Snow" -> R.drawable.ic_snowy
-        else -> R.drawable.ic_day
+        else -> WEATHER_NOT_SUPPORTED
     }
 
     private fun isNight(time: Int) = time !in (6..18)
