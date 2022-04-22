@@ -17,7 +17,7 @@ fun LoadingComponent(
     idle: @Composable () -> Unit = {},
     pending: @Composable () -> Unit = { LoadingIndicator() },
     success: @Composable () -> Unit,
-    error: @Composable () -> Unit,
+    error: @Composable () -> Unit = {},
     loadingState: LoadingState,
 ) {
     AnimatedContent(targetState = loadingState) { state ->

@@ -14,15 +14,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.ExperimentalUnitApi
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.apap.forecasty.R
 import com.apap.forecasty.domain.model.Forecast
@@ -37,19 +35,20 @@ fun WeatherScreen (forecast: Forecast?, city: String?) {
     val isLightTheme = isSystemInDarkTheme().not()
 
     Surface(Modifier.fillMaxSize()) {
-        CurrentWeather(forecast, city, isLightTheme)
+        forecast?.let {
+            CurrentWeather(it, city, isLightTheme)
+        }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CurrentWeather(
-    forecast: Forecast?,
+    forecast: Forecast,
     city: String?,
     isLightTheme: Boolean,
     viewModel: WeatherViewModel = hiltViewModel()
 ) {
-    forecast ?: return
     val currentDate = LocalDateTime.now()
 
     Column(modifier = Modifier
@@ -70,9 +69,7 @@ fun CurrentWeather(
                 isLightTheme
             )
             WeatherImage(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .scale(5f),
+                modifier = Modifier.fillMaxWidth(),
                 imageResId = viewModel.getImageForWeather(
                     conditions = forecast.currentConditions,
                     time = currentDate.hour,
@@ -88,10 +85,9 @@ fun WeatherImage(
     modifier: Modifier = Modifier,
     imageResId: Int,
 ) {
-    val paintImage: Painter = painterResource(id = imageResId)
     Image(
-        modifier = modifier,
-        painter = paintImage,
+        modifier = modifier.scale(5f),
+        painter = painterResource(id = imageResId),
         contentDescription = "weather_image",
     )
 }
@@ -140,10 +136,9 @@ fun LocationImage(
     modifier: Modifier = Modifier,
 ) {
 
-    val paintImage: Painter = painterResource(id = imageResId)
     Image(
         modifier = modifier,
-        painter = paintImage,
+        painter = painterResource(id = imageResId),
         contentScale = ContentScale.Fit,
         contentDescription = "location_image",
     )
@@ -163,9 +158,9 @@ fun TemperatureText(
     ) {
         Text(
             text = stringResource(id = R.string.celsius_degrees, formatArgs = arrayOf(temperature)),
-            Modifier.padding(PaddingValues(bottom = 75.dp)),
+            Modifier.padding(bottom = 75.dp),
             fontWeight = FontWeight.ExtraBold,
-            fontSize = TextUnit(value = 48f, type = TextUnitType.Sp),
+            fontSize = 48.sp,
             color = viewModel.getColorForTheme(isLightTheme),
         )
     }

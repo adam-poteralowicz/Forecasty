@@ -11,7 +11,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material3.Button
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -29,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.apap.forecasty.R
 import com.apap.forecasty.domain.model.Forecast
+import com.apap.forecasty.domain.model.Geolocation
 import com.apap.forecasty.presentation.viewModel.WelcomeViewModel
 import com.apap.forecasty.ui.theme.ForecastyBlue
 
@@ -59,34 +59,19 @@ fun WelcomeScreen(
         Toolbar(isLightTheme)
         LoadingComponent(
             success = {
-                forecast?.let { forecast ->
-                    geolocation?.let { it ->
-                        if (it.isNotEmpty()) {
-                            LaunchedEffect(Unit) {
-                                navigateToWeather(forecast, "${it[0].city}, ${it[0].country}")
-                                isLocationConfirmed = false
-                            }
-                        }
-                    }
-                }
+                OnForecastSuccessfullyLoaded(forecast, geolocation, navigateToWeather)
+                isLocationConfirmed = false
             },
-            error = {},
             loadingState = state,
         )
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(PaddingValues(bottom = 30.dp)),
+                .padding(bottom = 30.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Bottom,
         ) {
-            Image(
-                painterResource(id = R.drawable.ic_weather),
-                contentDescription = null,
-                Modifier
-                    .scale(5f)
-                    .padding(PaddingValues(bottom = 50.dp))
-            )
+            ForecastyLogo()
             OutlinedTextField(
                 value = city,
                 onValueChange = {
@@ -113,7 +98,7 @@ fun WelcomeScreen(
             )
             Button(
                 onClick = { viewModel.onProceedClicked(geolocation) },
-                Modifier
+                modifier = Modifier
                     .background(
                         color = viewModel.getColorForTheme(isLightTheme),
                         shape = CircleShape
@@ -136,15 +121,30 @@ fun WelcomeScreen(
 }
 
 @Composable
-fun Toolbar(isLightTheme: Boolean) {
+fun ForecastyLogo() {
 
-    CenterAlignedTopAppBar(
-        title = {
-            Text(
-                text = stringResource(id = R.string.app_name),
-                color = if (isLightTheme) Color.White else ForecastyBlue,
-                fontWeight = FontWeight.ExtraBold
-            )
-        },
+    Image(
+        painterResource(id = R.drawable.ic_weather),
+        contentDescription = null,
+        modifier = Modifier
+            .scale(5f)
+            .padding(bottom = 50.dp)
     )
+}
+
+@Composable
+private fun OnForecastSuccessfullyLoaded(
+    forecast: Forecast?,
+    geolocation: List<Geolocation>?,
+    navigateToWeather: (Forecast, String) -> Unit,
+) {
+    forecast?.let { forecast ->
+        geolocation?.let { it ->
+            if (it.isNotEmpty()) {
+                LaunchedEffect(Unit) {
+                    navigateToWeather(forecast, "${it[0].city}, ${it[0].country}")
+                }
+            }
+        }
+    }
 }
