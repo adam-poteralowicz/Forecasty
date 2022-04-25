@@ -7,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardActionScope
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.OutlinedTextField
@@ -72,50 +73,25 @@ fun WelcomeScreen(
             verticalArrangement = Arrangement.Bottom,
         ) {
             ForecastyLogo()
-            OutlinedTextField(
+            LocationChoiceTextField(
+                isLightTheme = isLightTheme,
                 value = city,
                 onValueChange = {
                     isLocationConfirmed = false
                     city = it
                 },
-                Modifier.padding(PaddingValues(bottom = 30.dp)),
-                label = {
-                    Text(
-                        text = stringResource(R.string.choose_location),
-                        color = viewModel.getColorForTheme(isLightTheme),
-                    )
-                },
-                singleLine = true,
-                colors = viewModel.setOutlinedTextFieldColors(isLightTheme),
-                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
-                keyboardActions = KeyboardActions(
-                    onDone = {
-                        keyboardController?.hide()
-                        isLocationConfirmed = true
-                        viewModel.onLocationChosen(city)
-                    }
-                ),
+                onDone = {
+                    keyboardController?.hide()
+                    isLocationConfirmed = true
+                    viewModel.onLocationChosen(city)
+                }
             )
-            Button(
-                onClick = { viewModel.onProceedClicked(geolocation) },
-                modifier = Modifier
-                    .background(
-                        color = viewModel.getColorForTheme(isLightTheme),
-                        shape = CircleShape
-                    )
-                    .clickable(
-                        enabled = isLocationConfirmed,
-                        onClick = {
-                            viewModel.onLocationChosen(city)
-                            viewModel.onProceedClicked(geolocation)
-                        })
-            ) {
-                Text(
-                    text = stringResource(R.string.proceed_button_text),
-                    color = if (isLightTheme) ForecastyBlue else Color.Black,
-                    fontWeight = FontWeight.Bold,
-                )
-            }
+            ProceedButton(
+                isLightTheme = isLightTheme,
+                isEnabled = isLocationConfirmed,
+                city = city,
+                geolocation = geolocation,
+            )
         }
     }
 }
@@ -130,6 +106,72 @@ fun ForecastyLogo() {
             .scale(5f)
             .padding(bottom = 50.dp)
     )
+}
+
+@Composable
+fun LocationChoiceTextField(
+    viewModel: WelcomeViewModel = hiltViewModel(),
+    isLightTheme: Boolean,
+    value: String,
+    onValueChange: (String) -> Unit,
+    onDone: KeyboardActionScope.() -> Unit,
+) {
+
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        modifier = Modifier.padding(bottom = 30.dp),
+        label = { LocationChoiceText(viewModel, isLightTheme) },
+        singleLine = true,
+        colors = viewModel.setOutlinedTextFieldColors(isLightTheme),
+        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+        keyboardActions = KeyboardActions(
+            onDone = onDone,
+        ),
+    )
+}
+
+@Composable
+fun LocationChoiceText(
+    viewModel: WelcomeViewModel = hiltViewModel(),
+    isLightTheme: Boolean,
+) {
+
+    Text(
+        text = stringResource(R.string.choose_location),
+        color = viewModel.getColorForTheme(isLightTheme),
+    )
+}
+
+@Composable
+fun ProceedButton(
+    viewModel: WelcomeViewModel = hiltViewModel(),
+    isLightTheme: Boolean,
+    isEnabled: Boolean,
+    city: String,
+    geolocation: List<Geolocation>?,
+) {
+
+    Button(
+        onClick = { viewModel.onProceedClicked(geolocation) },
+        modifier = Modifier
+            .background(
+                color = viewModel.getColorForTheme(isLightTheme),
+                shape = CircleShape
+            )
+            .clickable(
+                enabled = isEnabled,
+                onClick = {
+                    viewModel.onLocationChosen(city)
+                    viewModel.onProceedClicked(geolocation)
+                })
+    ) {
+        Text(
+            text = stringResource(R.string.proceed_button_text),
+            color = if (isLightTheme) ForecastyBlue else Color.Black,
+            fontWeight = FontWeight.Bold,
+        )
+    }
 }
 
 @Composable
