@@ -10,3 +10,5 @@ data class Geolocation(
     val longitude: Float,
     val country: String,
 ): Parcelable
+
+fun List<Geolocation>?.isNotNullOrEmpty(): Boolean = this != null && isNotEmpty()

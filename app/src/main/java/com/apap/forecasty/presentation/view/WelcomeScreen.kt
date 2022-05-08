@@ -49,7 +49,7 @@ fun WelcomeScreen(
     val isLightTheme = isSystemInDarkTheme().not()
 
     val keyboardController = LocalSoftwareKeyboardController.current
-    var city by rememberSaveable { mutableStateOf("") }
+    var inputLocation by rememberSaveable { mutableStateOf("") }
     var isLocationConfirmed by rememberSaveable { mutableStateOf(false) }
 
     Box(
@@ -60,8 +60,12 @@ fun WelcomeScreen(
         Toolbar(isLightTheme)
         LoadingComponent(
             success = {
-                OnForecastSuccessfullyLoaded(forecast, geolocation, navigateToWeather)
-                isLocationConfirmed = false
+                with(requireNotNull(geolocation)[0]) {
+                    LaunchedEffect(Unit) {
+                        navigateToWeather(requireNotNull(forecast), "$city, $country")
+                    }
+                    isLocationConfirmed = false
+                }
             },
             loadingState = state,
         )
@@ -75,21 +79,21 @@ fun WelcomeScreen(
             ForecastyLogo()
             LocationChoiceTextField(
                 isLightTheme = isLightTheme,
-                value = city,
+                value = inputLocation,
                 onValueChange = {
                     isLocationConfirmed = false
-                    city = it
+                    inputLocation = it
                 },
                 onDone = {
                     keyboardController?.hide()
                     isLocationConfirmed = true
-                    viewModel.onLocationChosen(city)
+                    viewModel.onLocationChosen(inputLocation)
                 }
             )
             ProceedButton(
                 isLightTheme = isLightTheme,
                 isEnabled = isLocationConfirmed,
-                city = city,
+                city = inputLocation,
                 geolocation = geolocation,
             )
         }
@@ -171,22 +175,5 @@ fun ProceedButton(
             color = if (isLightTheme) ForecastyBlue else Color.Black,
             fontWeight = FontWeight.Bold,
         )
-    }
-}
-
-@Composable
-private fun OnForecastSuccessfullyLoaded(
-    forecast: Forecast?,
-    geolocation: List<Geolocation>?,
-    navigateToWeather: (Forecast, String) -> Unit,
-) {
-    forecast?.let { forecast ->
-        geolocation?.let { it ->
-            if (it.isNotEmpty()) {
-                LaunchedEffect(Unit) {
-                    navigateToWeather(forecast, "${it[0].city}, ${it[0].country}")
-                }
-            }
-        }
     }
 }

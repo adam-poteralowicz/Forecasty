@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.apap.forecasty.domain.model.Forecast
 import com.apap.forecasty.domain.model.Geolocation
+import com.apap.forecasty.domain.model.isNotNullOrEmpty
 import com.apap.forecasty.domain.usecase.Geolocate
 import com.apap.forecasty.domain.usecase.GetForecast
 import com.apap.forecasty.presentation.view.LoadingState
@@ -47,7 +48,9 @@ class WelcomeViewModel @Inject constructor(
             _loadingStateFlow.value = LoadingState.Failure
         } else {
             _loadingStateFlow.value = LoadingState.Done
-            _forecast.emit(forecast)
+            if (geolocation.value.isNotNullOrEmpty()) {
+                _forecast.emit(forecast)
+            }
         }
     }
 
