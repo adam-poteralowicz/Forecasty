@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -35,7 +36,7 @@ import com.apap.forecasty.util.round
 import java.time.LocalDateTime
 
 @Composable
-fun WeatherScreen (forecast: Forecast?, city: String?) {
+fun WeatherScreen(forecast: Forecast?, city: String?) {
     val isLightTheme = isSystemInDarkTheme().not()
 
     Surface(Modifier.fillMaxSize()) {
@@ -54,10 +55,11 @@ fun CurrentWeather(
 ) {
     val currentDate = LocalDateTime.now()
 
-    Column(modifier = Modifier
-        .background(if (isLightTheme) ForecastyBlue else Color.Black)
-        .fillMaxSize()
-        .padding(4.dp)
+    Column(
+        modifier = Modifier
+            .background(if (isLightTheme) ForecastyBlue else Color.Black)
+            .fillMaxSize()
+            .padding(4.dp)
     ) {
         Toolbar(isLightTheme)
         Column(
@@ -102,6 +104,7 @@ fun DateAndLocation(
     isLightTheme: Boolean,
     viewModel: WeatherViewModel = hiltViewModel()
 ) {
+    val countryCode = location.split(",")[1]
     Column(
         modifier = Modifier
             .wrapContentSize(align = Alignment.TopStart)
@@ -114,17 +117,18 @@ fun DateAndLocation(
             style = MaterialTheme.typography.titleMedium,
         )
         Spacer(modifier = Modifier.size(4.dp))
-        Row(modifier = Modifier.wrapContentSize(),
+        Row(
+            modifier = Modifier.wrapContentSize(),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             LocationImage(
-                imageResId = R.drawable.ic_location,
+                imageResId = getCountryDrawable(countryCode),
                 modifier = Modifier
                     .size(32.dp)
                     .padding(end = 8.dp)
             )
             Text(
-                text = location,
+                text = location.split(",")[0],
                 fontWeight = FontWeight.Bold,
                 color = viewModel.getColorForTheme(isLightTheme),
                 style = MaterialTheme.typography.titleLarge,
@@ -166,4 +170,9 @@ fun TemperatureText(
             color = viewModel.getColorForTheme(isLightTheme),
         )
     }
+}
+
+@Composable
+fun getCountryDrawable(countryCode: String): Int = with(LocalContext.current) {
+    resources.getIdentifier(countryCode.trim().lowercase(), "drawable", packageName)
 }
