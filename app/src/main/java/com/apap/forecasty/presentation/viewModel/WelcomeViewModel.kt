@@ -33,14 +33,6 @@ class WelcomeViewModel @Inject constructor(
     private val _loadingStateFlow = MutableStateFlow(LoadingState.Idle)
     val loadingStateFlow = _loadingStateFlow.asStateFlow()
 
-    fun onProceedClicked(geolocationData: List<Geolocation>?) {
-        geolocationData?.let {
-            if (it.isNotEmpty()) {
-                loadForecast(it[0])
-            }
-        }
-    }
-
     private fun loadForecast(geolocationData: Geolocation) = viewModelScope.launch {
         _loadingStateFlow.value = LoadingState.Pending
         val forecast = getForecast(geolocationData.latitude, geolocationData.longitude)
@@ -56,7 +48,17 @@ class WelcomeViewModel @Inject constructor(
 
     fun onLocationChosen(city: String) = viewModelScope.launch {
         val geolocation = geolocate(city)
-        geolocation?.let { _geolocation.emit(geolocation) }
+        geolocation?.let { _geolocation.emit(geolocation) }.also {
+            onGeolocationFinished(geolocation)
+        }
+    }
+
+    private fun onGeolocationFinished(geolocationData: List<Geolocation>?) {
+        geolocationData?.let {
+            if (it.isNotEmpty()) {
+                loadForecast(it[0])
+            }
+        }
     }
 
     @Composable

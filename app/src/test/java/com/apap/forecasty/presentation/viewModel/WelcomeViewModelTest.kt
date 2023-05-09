@@ -60,12 +60,11 @@ class WelcomeViewModelTest {
     }
 
     @Test
-    fun `should do nothing on proceed clicked when geolocation attempt is unsuccessful`() = runTest {
+    fun `should do nothing when geolocation attempt is unsuccessful`() = runTest {
         coEvery { geolocate("") } returns null
 
         initViewModel()
         subject.onLocationChosen("")
-        subject.onProceedClicked(null)
 
         subject.geolocation.test {
             awaitItem() // skip initial value
@@ -74,9 +73,8 @@ class WelcomeViewModelTest {
     }
 
     @Test
-    fun `should do nothing on proceed clicked when geolocation data is empty`() = runTest {
+    fun `should do nothing when geolocation data is empty`() = runTest {
         initViewModel()
-        subject.onProceedClicked(emptyList())
 
         subject.geolocation.test {
             assertThat(expectMostRecentItem()).isEmpty()
@@ -85,13 +83,12 @@ class WelcomeViewModelTest {
     }
 
     @Test
-    fun `should load forecast on proceed clicked when geolocation attempt is successful`() = runTest {
+    fun `should load forecast when geolocation attempt is successful`() = runTest {
         val expectedResult = listOf(randomGeolocation())
         coEvery { geolocate("London") } returns expectedResult
 
         initViewModel()
         subject.onLocationChosen("London")
-        subject.onProceedClicked(expectedResult)
 
         subject.geolocation.test {
             assertThat(expectMostRecentItem()).isEqualTo(expectedResult)
@@ -101,11 +98,9 @@ class WelcomeViewModelTest {
 
     @Test
     fun `should emit LoadingState Failure when forecast is not found`() = runTest {
-        val geolocationData = listOf(randomGeolocation())
         coEvery { getForecast(any(), any()) } returns null
 
         initViewModel()
-        subject.onProceedClicked(geolocationData)
 
         subject.loadingStateFlow.test {
             assertThat(expectMostRecentItem()).isEqualTo(LoadingState.Failure)
@@ -114,12 +109,10 @@ class WelcomeViewModelTest {
 
     @Test
     fun `should emit LoadingState Done and should emit forecast when forecast is found`() = runTest {
-        val geolocationData = listOf(randomGeolocation())
         val expectedResult = randomForecast()
         coEvery { getForecast(any(), any()) } returns expectedResult
 
         initViewModel()
-        subject.onProceedClicked(geolocationData)
 
         subject.loadingStateFlow.test {
             assertThat(expectMostRecentItem()).isEqualTo(LoadingState.Done)

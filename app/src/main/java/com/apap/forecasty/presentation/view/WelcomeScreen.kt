@@ -3,18 +3,24 @@ package com.apap.forecasty.presentation.view
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActionScope
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.OutlinedTextField
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -23,13 +29,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.apap.forecasty.R
 import com.apap.forecasty.domain.model.Forecast
-import com.apap.forecasty.domain.model.Geolocation
 import com.apap.forecasty.presentation.viewModel.WelcomeViewModel
 import com.apap.forecasty.ui.theme.ForecastyBlue
 
@@ -50,7 +54,6 @@ fun WelcomeScreen(
 
     val keyboardController = LocalSoftwareKeyboardController.current
     var inputLocation by rememberSaveable { mutableStateOf("") }
-    var isLocationConfirmed by rememberSaveable { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
@@ -64,7 +67,6 @@ fun WelcomeScreen(
                     LaunchedEffect(Unit) {
                         navigateToWeather(requireNotNull(forecast), "$city, $country")
                     }
-                    isLocationConfirmed = false
                 }
             },
             loadingState = state,
@@ -81,20 +83,12 @@ fun WelcomeScreen(
                 isLightTheme = isLightTheme,
                 value = inputLocation,
                 onValueChange = {
-                    isLocationConfirmed = false
                     inputLocation = it
                 },
                 onDone = {
                     keyboardController?.hide()
-                    isLocationConfirmed = true
                     viewModel.onLocationChosen(inputLocation)
                 }
-            )
-            ProceedButton(
-                isLightTheme = isLightTheme,
-                isEnabled = isLocationConfirmed,
-                city = inputLocation,
-                geolocation = geolocation,
             )
         }
     }
@@ -145,35 +139,4 @@ fun LocationChoiceText(
         text = stringResource(R.string.choose_location),
         color = viewModel.getColorForTheme(isLightTheme),
     )
-}
-
-@Composable
-fun ProceedButton(
-    viewModel: WelcomeViewModel = hiltViewModel(),
-    isLightTheme: Boolean,
-    isEnabled: Boolean,
-    city: String,
-    geolocation: List<Geolocation>?,
-) {
-
-    Button(
-        onClick = { viewModel.onProceedClicked(geolocation) },
-        modifier = Modifier
-            .background(
-                color = viewModel.getColorForTheme(isLightTheme),
-                shape = CircleShape
-            )
-            .clickable(
-                enabled = isEnabled,
-                onClick = {
-                    viewModel.onLocationChosen(city)
-                    viewModel.onProceedClicked(geolocation)
-                })
-    ) {
-        Text(
-            text = stringResource(R.string.proceed_button_text),
-            color = if (isLightTheme) ForecastyBlue else Color.Black,
-            fontWeight = FontWeight.Bold,
-        )
-    }
 }
