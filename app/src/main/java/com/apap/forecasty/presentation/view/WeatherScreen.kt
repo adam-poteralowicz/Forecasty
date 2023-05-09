@@ -16,6 +16,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -28,19 +30,35 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
 import com.apap.forecasty.R
 import com.apap.forecasty.domain.model.Forecast
 import com.apap.forecasty.presentation.viewModel.WeatherViewModel
 import com.apap.forecasty.ui.theme.ForecastyBlue
+import com.apap.forecasty.util.OnLifecycleEvent
 import com.apap.forecasty.util.round
 import java.time.LocalDateTime
 
 @Composable
-fun WeatherScreen(forecast: Forecast?, city: String?, country: String?) {
+fun WeatherScreen(
+    forecast: Forecast?,
+    city: String?,
+    country: String?,
+    viewModel: WeatherViewModel = hiltViewModel()
+) {
+    val refreshedForecast by viewModel.refreshedForecast.collectAsState()
+
     val isLightTheme = isSystemInDarkTheme().not()
+    val currentForecast = refreshedForecast ?: forecast
+
+    OnLifecycleEvent { _, event ->
+        if (event == Lifecycle.Event.ON_RESUME) {
+            viewModel.refreshForecast()
+        }
+    }
 
     Surface(Modifier.fillMaxSize()) {
-        forecast?.let {
+        currentForecast?.let {
             CurrentWeather(it, city, country, isLightTheme)
         }
     }

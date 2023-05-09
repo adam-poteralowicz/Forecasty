@@ -5,4 +5,6 @@ import com.apap.forecasty.domain.model.Geolocation
 interface GeolocationRepository {
 
     suspend fun getGeolocationForCity(city: String): Result<List<Geolocation>>
+    fun saveLastGeolocation(geolocation: Geolocation)
+    fun getLastGeolocation() : Result<Geolocation>?
 }

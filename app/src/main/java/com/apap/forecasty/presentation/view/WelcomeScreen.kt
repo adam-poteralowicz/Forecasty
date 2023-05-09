@@ -56,6 +56,7 @@ fun WelcomeScreen(
             success = {
                 with(requireNotNull(geolocation)) {
                     if (isNotEmpty()) {
+                        viewModel.saveGeolocation(this[0])
                         val city = this[0].city
                         val country = this[0].country
                         LaunchedEffect(Unit) {

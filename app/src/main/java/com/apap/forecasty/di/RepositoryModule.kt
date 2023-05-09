@@ -1,13 +1,12 @@
 package com.apap.forecasty.di
 
-import com.apap.forecasty.data.repository.ForecastRepository
-import com.apap.forecasty.data.repository.ForecastRepositoryImpl
-import com.apap.forecasty.data.repository.GeolocationRepository
-import com.apap.forecasty.data.repository.GeolocationRepositoryImpl
+import com.apap.forecasty.data.repository.*
 import dagger.Binds
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -18,4 +17,11 @@ abstract class RepositoryModule {
 
     @Binds
     abstract fun geolocationRepository(impl: GeolocationRepositoryImpl): GeolocationRepository
+
+    companion object {
+
+        @Provides
+        @Singleton
+        fun provideGeolocationCache() = GeolocationCache()
+    }
 }

@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.apap.forecasty.data.repository.GeolocationCache
 import com.apap.forecasty.domain.model.Forecast
 import com.apap.forecasty.domain.model.Geolocation
 import com.apap.forecasty.domain.model.isNotNullOrEmpty
@@ -21,6 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class WelcomeViewModel @Inject constructor(
     private val geolocate: Geolocate,
+    private val geolocationCache: GeolocationCache,
     private val getForecast: GetForecast,
 ) : ViewModel() {
 
@@ -51,6 +53,10 @@ class WelcomeViewModel @Inject constructor(
         geolocation?.let { _geolocation.emit(geolocation) }.also {
             onGeolocationFinished(geolocation)
         }
+    }
+
+    fun saveGeolocation(geolocation: Geolocation) {
+        geolocationCache.save(geolocation)
     }
 
     private fun onGeolocationFinished(geolocationData: List<Geolocation>?) {

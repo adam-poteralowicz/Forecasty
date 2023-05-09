@@ -2,6 +2,7 @@ package com.apap.forecasty.presentation.viewModel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import app.cash.turbine.test
+import com.apap.forecasty.data.repository.GeolocationCache
 import com.apap.forecasty.domain.usecase.Geolocate
 import com.apap.forecasty.domain.usecase.GetForecast
 import com.apap.forecasty.presentation.view.LoadingState
@@ -24,6 +25,7 @@ class WelcomeViewModelTest {
     @get:Rule val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     @MockK private lateinit var geolocate: Geolocate
+    @MockK private lateinit var geolocationCache: GeolocationCache
     @MockK private lateinit var getForecast: GetForecast
 
     private lateinit var subject: WelcomeViewModel
@@ -34,7 +36,7 @@ class WelcomeViewModelTest {
     }
 
     private fun initViewModel() {
-        subject = WelcomeViewModel(geolocate, getForecast)
+        subject = WelcomeViewModel(geolocate, geolocationCache, getForecast)
     }
 
     @Test
@@ -98,9 +100,11 @@ class WelcomeViewModelTest {
 
     @Test
     fun `should emit LoadingState Failure when forecast is not found`() = runTest {
+        coEvery { geolocate(any()) } returns listOf(randomGeolocation())
         coEvery { getForecast(any(), any()) } returns null
 
         initViewModel()
+        subject.onLocationChosen("Wroclaw")
 
         subject.loadingStateFlow.test {
             assertThat(expectMostRecentItem()).isEqualTo(LoadingState.Failure)
@@ -110,9 +114,11 @@ class WelcomeViewModelTest {
     @Test
     fun `should emit LoadingState Done and should emit forecast when forecast is found`() = runTest {
         val expectedResult = randomForecast()
+        coEvery { geolocate(any()) } returns listOf(randomGeolocation())
         coEvery { getForecast(any(), any()) } returns expectedResult
 
         initViewModel()
+        subject.onLocationChosen("Wroclaw")
 
         subject.loadingStateFlow.test {
             assertThat(expectMostRecentItem()).isEqualTo(LoadingState.Done)
