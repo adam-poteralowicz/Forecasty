@@ -1,11 +1,17 @@
 package com.apap.forecasty.presentation.view
 
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -18,7 +24,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -29,7 +34,6 @@ import com.apap.forecasty.ui.theme.ForecastyBlue
 import com.apap.forecasty.util.round
 import java.time.LocalDateTime
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun WeatherScreen (forecast: Forecast?, city: String?) {
     val isLightTheme = isSystemInDarkTheme().not()
@@ -41,7 +45,6 @@ fun WeatherScreen (forecast: Forecast?, city: String?) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CurrentWeather(
     forecast: Forecast,
@@ -71,7 +74,7 @@ fun CurrentWeather(
             WeatherImage(
                 modifier = Modifier.fillMaxWidth(),
                 imageResId = viewModel.getImageForWeather(
-                    conditions = forecast.currentConditions,
+                    conditions = viewModel.getWeatherConditions(forecast.currentConditions),
                     time = currentDate.hour,
                 )
             )
@@ -144,7 +147,6 @@ fun LocationImage(
     )
 }
 
-@OptIn(ExperimentalUnitApi::class)
 @Composable
 fun TemperatureText(
     temperature: String,
