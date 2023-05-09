@@ -36,12 +36,12 @@ import com.apap.forecasty.util.round
 import java.time.LocalDateTime
 
 @Composable
-fun WeatherScreen(forecast: Forecast?, city: String?) {
+fun WeatherScreen(forecast: Forecast?, city: String?, country: String?) {
     val isLightTheme = isSystemInDarkTheme().not()
 
     Surface(Modifier.fillMaxSize()) {
         forecast?.let {
-            CurrentWeather(it, city, isLightTheme)
+            CurrentWeather(it, city, country, isLightTheme)
         }
     }
 }
@@ -50,6 +50,7 @@ fun WeatherScreen(forecast: Forecast?, city: String?) {
 fun CurrentWeather(
     forecast: Forecast,
     city: String?,
+    country: String?,
     isLightTheme: Boolean,
     viewModel: WeatherViewModel = hiltViewModel()
 ) {
@@ -71,6 +72,7 @@ fun CurrentWeather(
             DateAndLocation(
                 viewModel.formatDate(currentDate),
                 city ?: forecast.timezone,
+                country,
                 isLightTheme
             )
             WeatherImage(
@@ -100,11 +102,11 @@ fun WeatherImage(
 @Composable
 fun DateAndLocation(
     date: String,
-    location: String,
+    city: String,
+    country: String?,
     isLightTheme: Boolean,
     viewModel: WeatherViewModel = hiltViewModel()
 ) {
-    val countryCode = location.split(",")[1]
     Column(
         modifier = Modifier
             .wrapContentSize(align = Alignment.TopStart)
@@ -121,14 +123,16 @@ fun DateAndLocation(
             modifier = Modifier.wrapContentSize(),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            LocationImage(
-                imageResId = getCountryDrawable(countryCode),
-                modifier = Modifier
-                    .size(32.dp)
-                    .padding(end = 8.dp)
-            )
+            country?.let {
+                LocationImage(
+                    imageResId = getCountryDrawable(it),
+                    modifier = Modifier
+                        .size(32.dp)
+                        .padding(end = 8.dp)
+                )
+            }
             Text(
-                text = location.split(",")[0],
+                text = city,
                 fontWeight = FontWeight.Bold,
                 color = viewModel.getColorForTheme(isLightTheme),
                 style = MaterialTheme.typography.titleLarge,

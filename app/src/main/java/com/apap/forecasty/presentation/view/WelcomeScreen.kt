@@ -4,23 +4,14 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActionScope
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -44,7 +35,7 @@ import com.apap.forecasty.ui.theme.ForecastyBlue
 @Composable
 fun WelcomeScreen(
     viewModel: WelcomeViewModel = hiltViewModel(),
-    navigateToWeather: (Forecast, String) -> Unit,
+    navigateToWeather: (Forecast, String, String) -> Unit,
 ) {
 
     val forecast by viewModel.forecast.collectAsState()
@@ -63,9 +54,13 @@ fun WelcomeScreen(
         Toolbar(isLightTheme)
         LoadingComponent(
             success = {
-                with(requireNotNull(geolocation)[0]) {
-                    LaunchedEffect(Unit) {
-                        navigateToWeather(requireNotNull(forecast), "$city, $country")
+                with(requireNotNull(geolocation)) {
+                    if (isNotEmpty()) {
+                        val city = this[0].city
+                        val country = this[0].country
+                        LaunchedEffect(Unit) {
+                            navigateToWeather(requireNotNull(forecast), city, country)
+                        }
                     }
                 }
             },
